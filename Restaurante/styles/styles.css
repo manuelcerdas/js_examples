@@ -1,0 +1,46 @@
+body {
+    padding:20px;
+}
+
+.menu {
+    display: flex;
+    direction: row;
+}
+
+.platillo {
+    display: inline-block;
+    width: 15%;
+    border: 2px solid black;
+    margin: 5px;
+    padding: 10px;
+}
+
+.card {
+    width: 15%;
+}
+.entrada {
+    display: inline-block;    
+    text-align: left;
+    border: 1px solid black;
+    padding: 0 5px;    
+}
+
+.precio {    
+    width: 75px;    
+    margin-right: 0;
+}
+
+.descripcion {    
+    width: 400px;
+    margin-left: 0;
+}
+
+.mensajeError {
+    color: red;
+    font-style: italic;
+    display: none;
+}
+
+.controlError {
+    border: 2px solid red;
+}

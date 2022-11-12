@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<head>
+    <title>Arreglo bidimensional</title>
+    <style>
+        .cuadrito {
+            display: inline-block;
+            border: 2px solid black;
+            width:18px;
+            height:18px;
+            margin:-5px 0 0 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .fila {
+            display: block;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        .prendido {
+            background-color: green;
+        }
+
+        .escondido {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    
+    Escoja el largo (columnas):
+    <input type="radio" name="columnas" value="25"> 25
+    <input type="radio" name="columnas" value="50"> 50
+    <input type="radio" name="columnas" value="75"> 75
+    <input type="radio" name="columnas" value="100" checked> 100
+    
+    Escoja el alto (filas):
+    <input type="radio" name="filas" value="25"> 25
+    <input type="radio" name="filas" value="50" checked> 50
+    <input type="radio" name="filas" value="75"> 75
+    <input type="radio" name="filas" value="100"> 100
+    
+    <button>Generar</button>
+
+    <button id="calcular">Calcular</button>
+    <br /><br />
+    <div id="matriz"></div>
+    
+
+    <script>       
+        var matriz = []; 
+        var matriz2 = [];
+        var filas;
+        var columnas;
+
+        var botones = document.getElementsByTagName("button")[0].addEventListener("click",function(e){            
+            var fila;
+            var divFila;
+            var divCasilla;                                     
+
+            var controlFilas = document.getElementsByName("filas");                        
+            for (var i = 0; i < controlFilas.length; i++) {
+                if (controlFilas[i].checked) {
+                    filas = parseInt(controlFilas[i].value);
+                    break;
+                }
+            }
+
+            var controlColumnas = document.getElementsByName("columnas");                        
+            for (var i = 0; i < controlColumnas.length; i++) {
+                if (controlColumnas[i].checked) {
+                    columnas = parseInt(controlColumnas[i].value);
+                    break;
+                }
+            }
+            
+            for (var i = 0; i < filas; i++) {
+                fila = [];
+                divFila = document.createElement("div");
+                divFila.classList.add("fila");
+                
+                for (var j=0; j < columnas; j++) {                    
+                    fila.push(0);
+
+                    divCasilla = document.createElement("div");
+                    divCasilla.classList.add("cuadrito");
+                    divCasilla.setAttribute("fila",i);
+                    divCasilla.setAttribute("columna",j);
+                    divFila.appendChild(divCasilla);
+
+                }
+                matriz.push(fila);
+                matriz2.push(fila);
+                document.getElementById("matriz").appendChild(divFila);
+            }   
+                        
+            var cuadritos = document.getElementsByClassName("cuadrito");
+            for (var k=0; k < cuadritos.length; k++) {
+                cuadritos[k].addEventListener("click", function(e){                    
+                    var fila = parseInt(e.target.getAttribute("fila"));
+                    var columna = parseInt(e.target.getAttribute("columna"));
+
+                    if (matriz[fila][columna]) {
+                        e.target.classList.remove("prendido");
+                        matriz[fila][columna] = 0;                        
+                    }
+                    else {
+                        e.target.classList.add("prendido");
+                        matriz[fila][columna] = 1;                        
+                    }                    
+                });     
+                           
+            }                                                                  
+        });
+
+        document.getElementById("calcular").addEventListener("click",function(e){
+            setInterval(siguientePaso,1000);
+        });
+        function siguientePaso () {
+            var fPrev;            
+            var fNext;
+            var cPrev;
+            var cNext;
+            var cNext
+            var aux = "";
+
+            for (var f = 0; f < filas; f++) {
+                for (var c = 0; c < columnas; c ++) {
+                    /* 
+                        Veo las coordenadas de los vecinos.  
+                        Tomar en cuenta que el mundo es en forma de dona y hay que manuejar condiciones de borde
+                    */                   
+                    fPrev = ((f - 1) == -1)?filas-1:f-1;            
+                    fNext = ((f + 1) == filas)?0:f+1;
+                    cPrev = ((c - 1) == -1)?columnas-1:c-1;
+                    cNext = ((c + 1) == columnas)?0:c + 1;
+
+                     // Reviso cuantos vecinos están prendidos
+                    numVecinos = matriz[fPrev][cPrev] + matriz[fPrev][c] + matriz[fPrev][cNext];
+                    numVecinos +=    matriz[f][cPrev]     +                    matriz[f][cNext];
+                    numVecinos +=    matriz[fNext][cPrev] + matriz[fNext][c] + matriz[fNext][cNext];
+
+                    // Si la celda está prendida
+                    if (matriz[f][c]) {
+                        if ((numVecinos > 3) || (numVecinos < 2))
+                            matriz2[f][c] = 0;
+                        else 
+                            matriz2[f][c] = 1;
+                    }
+                }
+            }
+            
+            for (var i = 0; i < filas; i ++) {
+                for (var j = 0; j < columnas; j ++) {
+                    matriz[i][j] = matriz2[i][j];
+                    aux = 'div[fila="' + i + '"][columna="' + j + '"]';                    
+                    if (matriz[i][j]) 
+                        document.querySelector(aux).classList.add("prendido");                    
+                    else 
+                        document.querySelector(aux).classList.remove("prendido");
+                }
+            }
+
+            console.log("step");
+        }
+    </script>
+</body>

@@ -1,0 +1,26 @@
+[
+    {
+        "nombre":"Combo de churros y sardinas",
+        "descripcion":"Una combinación única de sabores que recordara tanto a la entrada como a la salida",
+        "precio": 5,
+        "disponible":true
+    },
+    {
+        "nombre":"Sandwich de hígado bañado en miel de almíbar",
+        "descripcion":"Un platillo novedoso que hará que todos sus problemas parezcan insignificantes",
+        "precio": 7.5,
+        "disponible":true
+    },
+    {
+        "nombre":"Ceviche con natilla",
+        "descripcion":"Lo mejor del mar une fuerzas con el mejor producto lácteo para crear un sabor inigualable",
+        "precio": 8.75,
+        "disponible":true
+    },
+    {
+        "nombre":"Tacos de sardina",
+        "descripcion":"Cocina mexicana con el sabor del mar",
+        "precio": 12.5,
+        "disponible":true
+    }
+]

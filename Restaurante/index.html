@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ejemplo de formulario</title>
+        <link href="/styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
+        <link href="/styles/styles.css" type="text/css" rel="stylesheet" />
+    </head>
+    <body>
+        <h1>Ejemplo de formulario</h1>
+        <form>
+            <div class="menu" id="menu">                                
+            </div>
+            
+            <p>Su orden</p>
+            <div id="orden">
+                <!--
+                <div>
+                    <span class="entrada precio">8.50</span>
+                    <span class="entrada descripcion">Copoz con salsa Lizano</span>
+                </div> 
+                -->
+            </div>
+            <p>Propina</p>
+            <input type="radio" name="propina" value="10" checked>10%
+            <input type="radio" name="propina" value="13">13%
+            <input type="radio" name="propina" value="15">15%
+            <input type="radio" name="propina" value="20">20%
+            <p><strong>SUBTOTAL: <span id="subtotal">0</span></strong></p>
+            <p><strong>PROPINA: <span id="propina">0</span></strong></p>     
+            <p><strong>TOTAL: <span id="total">0</span></strong></p>
+            <p class="mensajeError" id="ordenVacia">La order no puede ser 0</p>       
+            <p>Datos Personales</p>
+            <p class="mensajeError" id="datosPersonales">Por favor digite los campos marcados en rojo</p>       
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Nombre</td>
+                        <td><input type="text" value="" id="nombre"></td>
+                    </tr>
+                    <tr>
+                        <td>Apellido</td>
+                        <td><input type="text" value="" id="apellido"></td>
+                    </tr>
+                    <tr>
+                        <td>Teléfono (solo los 8 dígitos)</td>
+                        <td><input type="number" value="" id="telefono" maxlength="8"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            Dirección<br />
+                            <textarea id="direccion" rows="10" cols="80"></textarea>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />            
+            <input type="reset" value="Limpiar Orden">
+            <input type="submit" value="Enviar la Orden">            
+        </form>
+        <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+        <script src="/scripts/bootstrap.min.js"></script>
+        <script src="/scripts/scripts.js"></script>
+    </body>       
+</html>
