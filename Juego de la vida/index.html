@@ -31,16 +31,12 @@
 <body>
     
     Escoja el largo (columnas):
-    <input type="radio" name="columnas" value="25"> 25
-    <input type="radio" name="columnas" value="50"> 50
-    <input type="radio" name="columnas" value="75"> 75
-    <input type="radio" name="columnas" value="100" checked> 100
+    <input type="radio" name="columnas" title="25columnas" value="25" checked> 25
+    <input type="radio" name="columnas" title="50columnas" value="50"> 50    
     
     Escoja el alto (filas):
-    <input type="radio" name="filas" value="25"> 25
-    <input type="radio" name="filas" value="50" checked> 50
-    <input type="radio" name="filas" value="75"> 75
-    <input type="radio" name="filas" value="100"> 100
+    <input type="radio" name="filas" title ="25filas" value="25" checked> 25
+    <input type="radio" name="filas" title="50filas" value="50"> 50    
     
     <button>Generar</button>
 
@@ -108,15 +104,14 @@
                     }
                     else {
                         e.target.classList.add("prendido");
-                        matriz[fila][columna] = 1;                        
-                    }                    
-                });     
-                           
+                        matriz[fila][columna] = 1;                                               
+                    }                       
+                });                     
             }                                                                  
         });
 
         document.getElementById("calcular").addEventListener("click",function(e){
-            setInterval(siguientePaso,1000);
+            setInterval(siguientePaso,1000);            
         });
         function siguientePaso () {
             var fPrev;            
@@ -124,8 +119,10 @@
             var cPrev;
             var cNext;
             var cNext
-            var aux = "";
-
+            var aux = "";  
+            
+            var tira = ""                        
+ 
             for (var f = 0; f < filas; f++) {
                 for (var c = 0; c < columnas; c ++) {
                     /* 
@@ -136,34 +133,36 @@
                     fNext = ((f + 1) == filas)?0:f+1;
                     cPrev = ((c - 1) == -1)?columnas-1:c-1;
                     cNext = ((c + 1) == columnas)?0:c + 1;
-
-                     // Reviso cuantos vecinos están prendidos
+                    
+                    // Reviso cuantos vecinos están prendidos
                     numVecinos = matriz[fPrev][cPrev] + matriz[fPrev][c] + matriz[fPrev][cNext];
-                    numVecinos +=    matriz[f][cPrev]     +                    matriz[f][cNext];
-                    numVecinos +=    matriz[fNext][cPrev] + matriz[fNext][c] + matriz[fNext][cNext];
-
-                    // Si la celda está prendida
-                    if (matriz[f][c]) {
-                        if ((numVecinos > 3) || (numVecinos < 2))
-                            matriz2[f][c] = 0;
-                        else 
-                            matriz2[f][c] = 1;
-                    }
-                }
+                    numVecinos += matriz[f][cPrev] + matriz[f][cNext];
+                    numVecinos += matriz[fNext][cPrev] + matriz[fNext][c] + matriz[fNext][cNext];
+                                                                                                                                            
+                    aux = 'div[fila="' + f + '"][columna="' + c + '"]';
+                    document.querySelector(aux).classList.remove("prendido");
+                    if (matriz[f][c] > 0) {
+                        if ((numVecinos == 2) || (numVecinos == 3)) {
+                            document.querySelector(aux).classList.add("prendido");
+                        }                        
+                    } 
+                    else {
+                        if (numVecinos == 3) {
+                            document.querySelector(aux).classList.add("prendido");
+                        }                        
+                    }                                                           
+                }                
             }
-            
-            for (var i = 0; i < filas; i ++) {
-                for (var j = 0; j < columnas; j ++) {
-                    matriz[i][j] = matriz2[i][j];
-                    aux = 'div[fila="' + i + '"][columna="' + j + '"]';                    
-                    if (matriz[i][j]) 
-                        document.querySelector(aux).classList.add("prendido");                    
-                    else 
-                        document.querySelector(aux).classList.remove("prendido");
+                        
+            for (var f = 0; f < filas; f ++) {
+                for (var c = 0; c < columnas; c ++) {                    
+                    aux = 'div[fila="' + f + '"][columna="' + c + '"]';                    
+                    matriz[f][c] = 0;
+                    if (document.querySelector(aux).classList.contains("prendido")) {
+                        matriz[f][c] = 1;
+                    }                    
                 }
-            }
-
-            console.log("step");
+            }                                    
         }
     </script>
 </body>
