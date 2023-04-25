@@ -1,0 +1,46 @@
+body {
+    background-color: #fdfcfd;
+}
+
+header {
+    font-size:64px;
+    font-weight: bold;
+    color: #09647f;
+    text-align: center;
+}
+
+.controls {
+    background-color: #00afb9;
+    border-width: 5px;
+    border-radius: 25px;
+    border:5px solid #fed9b7;
+    padding: 5px 10px 5px 10px;
+    max-width: 24%;
+}
+
+#grid {
+    margin: 15px auto;
+    text-align: center;
+}
+
+.cell {
+    display: inline-block;
+    border: 2px solid #062d4d;
+    width:18px;
+    height:18px;
+    margin:-5px 0 0 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.row {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.alive {
+    background-color: #0081a7;
+}
+

@@ -1,165 +1,127 @@
 <!DOCTYPE html>
 <head>
-    <title>Arreglo bidimensional</title>
-    <style>
-        .cuadrito {
-            display: inline-block;
-            border: 2px solid black;
-            width:18px;
-            height:18px;
-            margin:-5px 0 0 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        .fila {
-            display: block;
-            margin: 0;
-            padding: 0;
-            border: none;
-        }
-
-        .prendido {
-            background-color: green;
-        }
-
-        .escondido {
-            display: none;
-        }
-    </style>
+    <title>Game of life</title>
+    <link href="styles.css" rel="stylesheet">
 </head>
-<body>
-    
-    Escoja el largo (columnas):
-    <input type="radio" name="columnas" title="25columnas" value="25" checked> 25
-    <input type="radio" name="columnas" title="50columnas" value="50"> 50    
-    
-    Escoja el alto (filas):
-    <input type="radio" name="filas" title ="25filas" value="25" checked> 25
-    <input type="radio" name="filas" title="50filas" value="50"> 50    
-    
-    <button>Generar</button>
+<body>    
+    <div class="controls">
+        Choose grid size:
+        <input type="radio" name="gridSize" title="25columns" value="25" checked> 25 X 20
+        <input type="radio" name="gridSize" title="50columns" value="50"> 50 X 50   
+                
+        <button>Create grid</button>
 
-    <button id="calcular">Calcular</button>
-    <br /><br />
-    <div id="matriz"></div>
+        <button id="start">Start game</button>
+    </div>
+    <header>The Game of Life</header>
+    <div id="grid"></div>
     
 
     <script>       
-        var matriz = []; 
-        var matriz2 = [];
-        var filas;
-        var columnas;
+        var grid = [];         
+        var rows;
+        var columns;
 
         var botones = document.getElementsByTagName("button")[0].addEventListener("click",function(e){            
-            var fila;
-            var divFila;
-            var divCasilla;                                     
+            var row;
+            var divRow;
+            var divCell;                                     
 
-            var controlFilas = document.getElementsByName("filas");                        
-            for (var i = 0; i < controlFilas.length; i++) {
-                if (controlFilas[i].checked) {
-                    filas = parseInt(controlFilas[i].value);
+            var gridSize = document.getElementsByName("gridSize");                        
+            for (var i = 0; i < gridSize.length; i++) {
+                if (gridSize[i].checked) {
+                    rows = parseInt(gridSize[i].value);
+                    columns = rows;
                     break;
                 }
             }
 
-            var controlColumnas = document.getElementsByName("columnas");                        
-            for (var i = 0; i < controlColumnas.length; i++) {
-                if (controlColumnas[i].checked) {
-                    columnas = parseInt(controlColumnas[i].value);
-                    break;
-                }
-            }
-            
-            for (var i = 0; i < filas; i++) {
-                fila = [];
-                divFila = document.createElement("div");
-                divFila.classList.add("fila");
+            for (var i = 0; i < rows; i++) {
+                row = [];
+                divRow = document.createElement("div");
+                divRow.classList.add("row");
                 
-                for (var j=0; j < columnas; j++) {                    
-                    fila.push(0);
+                for (var j=0; j < columns; j++) {                    
+                    row.push(0);
 
-                    divCasilla = document.createElement("div");
-                    divCasilla.classList.add("cuadrito");
-                    divCasilla.setAttribute("fila",i);
-                    divCasilla.setAttribute("columna",j);
-                    divFila.appendChild(divCasilla);
+                    divCell = document.createElement("div");
+                    divCell.classList.add("cell");
+                    divCell.setAttribute("row",i);
+                    divCell.setAttribute("column",j);
+                    divRow.appendChild(divCell);
 
                 }
-                matriz.push(fila);
-                matriz2.push(fila);
-                document.getElementById("matriz").appendChild(divFila);
+                grid.push(row);                
+                document.getElementById("grid").appendChild(divRow);
             }   
                         
-            var cuadritos = document.getElementsByClassName("cuadrito");
-            for (var k=0; k < cuadritos.length; k++) {
-                cuadritos[k].addEventListener("click", function(e){                    
-                    var fila = parseInt(e.target.getAttribute("fila"));
-                    var columna = parseInt(e.target.getAttribute("columna"));
+            var cells = document.getElementsByClassName("cell");
+            for (var k=0; k < cells.length; k++) {
+                cells[k].addEventListener("click", function(e){                    
+                    var row = parseInt(e.target.getAttribute("row"));
+                    var column = parseInt(e.target.getAttribute("column"));
 
-                    if (matriz[fila][columna]) {
-                        e.target.classList.remove("prendido");
-                        matriz[fila][columna] = 0;                        
+                    if (grid[row][column]) {
+                        e.target.classList.remove("alive");
+                        grid[row][column] = 0;                        
                     }
                     else {
-                        e.target.classList.add("prendido");
-                        matriz[fila][columna] = 1;                                               
+                        e.target.classList.add("alive");
+                        grid[row][column] = 1;                                               
                     }                       
                 });                     
             }                                                                  
         });
 
-        document.getElementById("calcular").addEventListener("click",function(e){
-            setInterval(siguientePaso,1000);            
+        document.getElementById("start").addEventListener("click",function(e){
+            setInterval(nextStep,1000);            
         });
-        function siguientePaso () {
+
+        function nextStep () {
             var fPrev;            
             var fNext;
             var cPrev;
             var cNext;
             var cNext
-            var aux = "";  
-            
-            var tira = ""                        
+            var aux = "";                                                
  
-            for (var f = 0; f < filas; f++) {
-                for (var c = 0; c < columnas; c ++) {
+            for (var f = 0; f < rows; f++) {
+                for (var c = 0; c < columns; c ++) {
                     /* 
                         Veo las coordenadas de los vecinos.  
-                        Tomar en cuenta que el mundo es en forma de dona y hay que manuejar condiciones de borde
+                        Tomar en cuenta que el mundo es en forma de dona y hay que manejar condiciones de borde
                     */                   
-                    fPrev = ((f - 1) == -1)?filas-1:f-1;            
-                    fNext = ((f + 1) == filas)?0:f+1;
-                    cPrev = ((c - 1) == -1)?columnas-1:c-1;
-                    cNext = ((c + 1) == columnas)?0:c + 1;
+                    fPrev = ((f - 1) == -1)?rows-1:f-1;            
+                    fNext = ((f + 1) == rows)?0:f+1;
+                    cPrev = ((c - 1) == -1)?columns-1:c-1;
+                    cNext = ((c + 1) == columns)?0:c + 1;
                     
                     // Reviso cuantos vecinos están prendidos
-                    numVecinos = matriz[fPrev][cPrev] + matriz[fPrev][c] + matriz[fPrev][cNext];
-                    numVecinos += matriz[f][cPrev] + matriz[f][cNext];
-                    numVecinos += matriz[fNext][cPrev] + matriz[fNext][c] + matriz[fNext][cNext];
+                    numNeighbors = grid[fPrev][cPrev] + grid[fPrev][c] + grid[fPrev][cNext];
+                    numNeighbors += grid[f][cPrev] + grid[f][cNext];
+                    numNeighbors += grid[fNext][cPrev] + grid[fNext][c] + grid[fNext][cNext];
                                                                                                                                             
-                    aux = 'div[fila="' + f + '"][columna="' + c + '"]';
-                    document.querySelector(aux).classList.remove("prendido");
-                    if (matriz[f][c] > 0) {
-                        if ((numVecinos == 2) || (numVecinos == 3)) {
-                            document.querySelector(aux).classList.add("prendido");
+                    aux = 'div[row="' + f + '"][column="' + c + '"]';
+                    document.querySelector(aux).classList.remove("alive");
+                    if (grid[f][c] > 0) {
+                        if ((numNeighbors == 2) || (numNeighbors == 3)) {
+                            document.querySelector(aux).classList.add("alive");
                         }                        
                     } 
                     else {
-                        if (numVecinos == 3) {
-                            document.querySelector(aux).classList.add("prendido");
+                        if (numNeighbors == 3) {
+                            document.querySelector(aux).classList.add("alive");
                         }                        
                     }                                                           
                 }                
             }
                         
-            for (var f = 0; f < filas; f ++) {
-                for (var c = 0; c < columnas; c ++) {                    
-                    aux = 'div[fila="' + f + '"][columna="' + c + '"]';                    
-                    matriz[f][c] = 0;
-                    if (document.querySelector(aux).classList.contains("prendido")) {
-                        matriz[f][c] = 1;
+            for (var f = 0; f < rows; f ++) {
+                for (var c = 0; c < columns; c ++) {                    
+                    aux = 'div[row="' + f + '"][column="' + c + '"]';                    
+                    grid[f][c] = 0;
+                    if (document.querySelector(aux).classList.contains("alive")) {
+                        grid[f][c] = 1;
                     }                    
                 }
             }                                    
